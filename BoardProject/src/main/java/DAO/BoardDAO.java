@@ -49,8 +49,8 @@ public class BoardDAO {
 			}
 		}
 	   
-	   public List<BoardDTO> printBoard() throws Exception{ //자유게시판 출력
-		   String sql = "select * from board order by write_Date";
+	   public List<BoardDTO> printBoard() throws Exception{ //자유게시판 출력 selectALL
+		   String sql = "select * from board order by seq desc";
 		   try(Connection con = this.getConnection();
 				   PreparedStatement pstat = con.prepareStatement(sql);
 				   ResultSet rs = pstat.executeQuery();
@@ -73,8 +73,66 @@ public class BoardDAO {
 				   return list;
 			
 		   }
-		   
-	   
+   
 	   }
+	   
+	   public BoardDTO selectBoard(int seq) throws Exception{ //selectById
+		   String sql = "select * from board where seq =?";
+		   try(Connection con = this.getConnection();
+				   PreparedStatement pstat = con.prepareStatement(sql);
+				){
+			   
+			   pstat.setInt(1, seq);
+			   
+			   try(ResultSet rs = pstat.executeQuery();){
+				  BoardDTO dto = new BoardDTO(); 
+				   
+				   rs.next();
+					   
+					 dto.setSeq(rs.getInt("seq"));
+					   dto.setTitle(rs.getString("title"));
+					   dto.setWriter(rs.getString("writer"));
+					   dto.setWrite_date(rs.getTimestamp("write_date"));
+					   dto.setView_count(rs.getInt("view_count"));
+					   dto.setContents(rs.getString("contents"));
+					 
+			 
+					   return dto;
+				   
+
+			   }
+		   }
+		   
+	   }
+	   
+	   
+		public int boardDelete(int seq) throws Exception{
+			String sql = "delete from board where seq = ?";
+			try(Connection con = this.getConnection();
+					PreparedStatement pstat = con.prepareStatement(sql);){
+				pstat.setInt(1, seq);
+				int result = pstat.executeUpdate();
+				con.commit();
+				return result;
+			}
+		}
+		
+		
+		public int update(BoardDTO dto) throws Exception{
+			String sql = "update Board set title=?, contents=? where seq=?";
+			try(Connection con = this.getConnection();
+					PreparedStatement pstat = con.prepareStatement(sql);){
+				
+				pstat.setString(1, dto.getTitle());
+				pstat.setString(2, dto.getContents());
+				pstat.setInt(3, dto.getSeq());;
+				
+				
+				int result = pstat.executeUpdate();
+				con.commit();
+				return result;
+			}
+		}
+	   
 }
 

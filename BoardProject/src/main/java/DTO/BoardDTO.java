@@ -58,32 +58,41 @@ public class BoardDTO {
 		}
 		
 		
-//		public String getFormDate() {
-//			
-//			long writeTime = this.write_date.getTime();
-//			long currentTime = System.currentTimeMillis();
-//			
-//			//System.currentTimeMillis()
-//			//1970년 1월 1일부터 경과한 시간을 long값으로 리턴 1/1000 초값을리턴
-//			long timeGap = currentTime - writeTime;
-//			System.out.println(timeGap);
-//			
-//			if(timeGap<60*1000) {
-//				return "1분 이내";
-//			}else if(timeGap <300*1000) {
-//				return "5분 이내";
-//			}else if(timeGap <3600*1000) {
-//				return "1시간 이내";
-//			}else if(timeGap < 86400*1000) {
-//				return "24시간 이내";
-//			}else {
-//				SimpleDateFormat sdf = new SimpleDateFormat("MM월dd일 hh시mm분");
-//				return sdf.format(write_date);
-//			}
-//		
-//
-//		}
+		public String getFormDate() {
+			
+			long writeTime = this.write_date.getTime();
+			long currentTime = System.currentTimeMillis();
+			
+			//System.currentTimeMillis()
+			//1970년 1월 1일부터 경과한 시간을 long값으로 리턴 1/1000 초값을리턴
+			long timeGap = currentTime - writeTime;
+			System.out.println(timeGap);
+			
+			if(timeGap<60*1000) {
+				return "1분 이내";
+			}else if(timeGap <300*1000) {
+				return "5분 이내";
+			}else if(timeGap <3600*1000) {
+				return "1시간 이내";
+			}else if(timeGap < 86400*1000) {
+				return "24시간 이내";
+			}else {
+				SimpleDateFormat sdf = new SimpleDateFormat("MM월dd일 hh시mm분");
+				return sdf.format(write_date);
+			}
 		
+
+		}
+		
+		
+		
+
+		public BoardDTO(int seq, String title, String contents) {
+			super();
+			this.seq = seq;
+			this.title = title;
+			this.contents = contents;
+		}
 		public BoardDTO() {}
 		
 		

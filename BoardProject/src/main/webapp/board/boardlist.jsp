@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,12 +30,12 @@
         *{
             box-sizing: border-box;
         }
-      div{
+		   div{
             border: 1px solid black;
         }
        .container{
             width: 100%;
-            height: 100%; 
+            height: 80%; 
         }
     	.contents{
     	
@@ -46,13 +47,20 @@
         
         	text-align:right;
         }
+        
+        .other{
+        
+        	height:400px
+        }
+        
+        
     </style>
 
 
     </head>
 <body>
            
-            <div class="container alert alert-secondary">
+            <div class="container">
                 <div class="row header">
                     <div class="col-12 col-md-12 col-sm-12 text-center" ><strong>자유게시판</strong></div>
                     <div class="col-md-1 d-none d-md-block">번호</div>
@@ -62,28 +70,44 @@
                     <div class="col-1 col-md-1">조회</div>
                 </div>
                 
-              
+              <c:choose>
+            	    <c:when test="${not empty list}">  <!-- 리스트가 비어있지않다면 -->
             	    <c:forEach var="i" items="${list}">
                 	
 		                <div class="row contents">
 		                   	<div class="col-md-1 d-none d-md-block">${i.seq}</div>
-		                    <div class="col-5 col-md-6">${i.title}</div>
+		                    <div class="col-5 col-md-6"><a href="/detail.board?seq=${i.seq}">${i.title}</a></div>
 		                    <div class="col-3 col-md-2">${i.writer}</div>
-		                    <div class="col-3 col-md-2">${i.write_date}</div>
+		                    <div class="col-3 col-md-2"><fmt:formatDate pattern="yyyy년 MM월 dd일" value="${i.write_date}"/></div>
 		                    <div class="col-1 col-md-1">${i.view_count}</div> 
-		                </div>
-		                
+		                </div>    
           			</c:forEach>
-          	
+          			</c:when>
+          			<c:otherwise>
+          					 <div class="other">출력할내용이 없습니다</div>
+          			</c:otherwise>
+          	</c:choose>
           		
           	
                 <div class="row footer">
                         <div class="col-8 col-md-12 col-sm-8 navi">
-                            1 2 3 4 5 6
+                            <nav aria-label="Page navigation example">
+  							<ul class="pagination justify-content-center">
+  							  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+ 						   <li class="page-item"><a class="page-link" href="#">1</a></li>
+  							  <li class="page-item"><a class="page-link" href="#">2</a></li>
+ 						   <li class="page-item"><a class="page-link" href="#">3</a></li>
+ 		 				  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+						  </ul>
+						</nav>
                         </div>
                         <div class="col-4 col-md-12 col-sm-4 right">
-                            <button type="button" id="towriter">작성하기</button>
-                             <button type="button" id="toindex">뒤로가기</button>
+                        
+                        <button type="button" class="btn btn-outline-secondary" id="towriter">작성하기</button>
+                          <button type="button" class="btn btn-outline-secondary" id="toindex">뒤로가기</button>
+                          
+                           <!--  <button type="button" id="towriter">작성하기</button>
+                             <button type="button" id="toindex">뒤로가기</button>-->
                         </div>
                         
                 </div>

@@ -92,7 +92,7 @@
                 	let title = $("#titlee").val();
                 	let contents = $("#textt").val();
       	
-                	if(title==""&&contents==""){
+                	if(title==""||contents==""){
                 		alert("제목이나 내용을 입력하지 않았습니다")
                 		return false;
                 	}else{

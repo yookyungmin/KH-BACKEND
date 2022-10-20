@@ -98,7 +98,7 @@ public class MembersController extends HttpServlet {
 			response.sendRedirect("/");
 		}else if(uri.equals("/mypage.mem")){
 			MemberDAO dao= MemberDAO.getInstance();
-			String id = request.getSession().getAttribute("loginID").toString();
+			String id = request.getSession().getAttribute("loginID").toString();  //dao에서 사용하기위해 id값을 가져옴
 			
 			MemberDTO dto = dao.selectMypage(id);
 			
