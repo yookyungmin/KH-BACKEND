@@ -70,7 +70,7 @@
             <div class="row">
                 <div class="title">ID :</div>
                 <div class="box1"><input type="text" name="id" id="inputId" placeholder="사용하실 id를 입력하세요" ></div>
-                <div class="box2"><button type="button" id="idcheck">중복확인</button></div>
+                <div class="box2"><button type="button" id="idcheck">중복확인</button><span id="idresult"></span></div>
             </div>
             <div class="row">
                 <div class="title">패스워드 :</div>
@@ -160,7 +160,7 @@
         $("#inputId").on("input", function(){  //id입력칸 글씨 입력하면 false
         	idcheckk=false;
         }) //중복체크
-
+	/*
         idcheck.onclick = function () {
         	let id = inputID.value;
         	
@@ -184,7 +184,78 @@
                //idcheck.mem?id= 서블릿 id= 데이터
  
            
-        }   //중복확인
+        }   //중복확인  
+        */
+        
+   		   $("#idcheck").on("click",function(){
+    		let id = $("#inputId").val();
+    		
+    		let regx = /[a-z0-9_]{8,14}/;
+
+            let regxresult = regx.test(id);
+            
+    			if(id==""){
+    			alert("아이디를 먼저 입력하세요.");
+    			$("#inputId").focus();
+    			return;
+    		}else if(!regxresult){
+    			alert("사용이 불가능한 id형식입니다")
+    			$("#inputId").val("");
+    			
+    		}else {
+    			$.ajax({
+    				url:"/idcheck.mem",
+    				data:{"id": id}
+    			}).done(function(resp){
+    				console.log(resp);
+    				if(resp=="true"){  //아이디가 이미 존재하므로 사용할수 없는 경우
+    					$("#idresult").html("이미 사용중인 ID입니다")
+    				}else{ //아이디가 존재하지 않으므로사용 할수 있는 경우
+    					$("#idresult").html("사용 가능한 ID입니다")
+    				}
+    				
+    			})
+    		}
+    			
+    			
+    	});    
+    	//중복확인 버튼이 있을떄 ajax
+        
+    	/*
+        $("#inputId").on("input",function(){
+    		let id = $("#inputId").val();
+    		
+    		let regx = /[a-z0-9_]{8,14}/;
+
+            let regxresult = regx.test(id);
+            
+    			if(id==""){
+    				$("#idresult").html("id 먼저 입력 하세요")
+    	
+    			return;
+    		}else if(!regxresult){
+    			$("#idresult").html("사용불가능한 id 형식")
+    			
+    			
+    		}else {
+    			$.ajax({
+    				url:"/idcheck.mem",
+    				data:{"id": id}
+    			}).done(function(resp){
+    				console.log(resp);
+    				if(resp=="true"){  //아이디가 이미 존재하므로 사용할수 없는 경우
+    					$("#idresult").html("이미 사용중인 ID입니다")
+    				}else{ //아이디가 존재하지 않으므로사용 할수 있는 경우
+    					$("#idresult").html("사용 가능한 ID입니다")
+    				}
+    				
+    			})
+    		}
+    			
+    			
+    	}); 
+    	*/
+         //중복확인 버튼이 없을떄 ajax방법, 트래픽 소모가 많다
         
     	let pwcheckk = false;
         

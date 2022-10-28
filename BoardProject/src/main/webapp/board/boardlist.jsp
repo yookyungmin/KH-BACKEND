@@ -52,7 +52,16 @@
         
         	height:400px
         }
-        
+        a{
+  
+ 		 text-decoration: none; /* 링크의 밑줄 제거 */
+ 	 	color: inherit; /* 링크의 색상 제거 */
+		}
+		a:hover{
+		 color : black;
+		 font-weight:700;
+		}
+
         
     </style>
 
@@ -78,7 +87,8 @@
 		                   	<div class="col-md-1 d-none d-md-block">${i.seq}</div>
 		                    <div class="col-5 col-md-6"><a href="/detail.board?seq=${i.seq}">${i.title}</a></div>
 		                    <div class="col-3 col-md-2">${i.writer}</div>
-		                    <div class="col-3 col-md-2"><fmt:formatDate pattern="yyyy년 MM월 dd일" value="${i.write_date}"/></div>
+		                    <div class="col-3 col-md-2">${i.formDate}</div>
+		                	<!-- <div class="col-3 col-md-2"><fmt:formatDate pattern="yyyy년 MM월 dd일" value="${i.write_date}"/></div> -->
 		                    <div class="col-1 col-md-1">${i.view_count}</div> 
 		                </div>    
           			</c:forEach>
@@ -93,13 +103,10 @@
                         <div class="col-8 col-md-12 col-sm-8 navi">
                             <nav aria-label="Page navigation example">
   							<ul class="pagination justify-content-center">
-  							  <li class="page-item"><a class="page-link" href="#">Previous</a></li>
- 						   <li class="page-item"><a class="page-link" href="#">1</a></li>
-  							  <li class="page-item"><a class="page-link" href="#">2</a></li>
- 						   <li class="page-item"><a class="page-link" href="#">3</a></li>
- 		 				  <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  							${navi}
 						  </ul>
 						</nav>
+								
                         </div>
                         <div class="col-4 col-md-12 col-sm-4 right">
                         

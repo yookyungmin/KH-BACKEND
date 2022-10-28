@@ -57,7 +57,7 @@
         </head>
 
         <body>
-            <form action="/writer.board" method="post" id="write">
+            <form action="/writer.board" method="post" id="write" enctype="multipart/form-data">
             <div class="container">
                 <div class="header">
                     <div style="text-align:center">
@@ -75,23 +75,66 @@
                 </div>
                 <div class="footer">
                     <div class="right">
-                        <button type="button" id="toBoard">목록으로</button>
-                          <button type="submit">작성완료</button>
+                    	
+                    
+                    	<button type=button id="fileAdd" class="btn btn-dark">파일추가</button>
+                    	
+                    
+                        <button type="button" id="toBoard" class="btn btn-outline-primary">목록으로</button>
+                          <button type="submit" class="btn btn-primary">작성완료</button>
                     </div>
                 
                 </div>
             </div>
             </form>
             <script>
-
+            //동일한 name의 파일들은 받을 수 없다  multiple사용못ㅁ함
+            
+            	let count=0;
+				$("#fileAdd").on("click", function(){
+				
+					if($("input[type=file]").length>4){
+						alert("파일은 최대 5개까지만 업로드 가능합니다");
+						return;
+					}
+			
+					let fileDiv=$("<div>");
+					
+					let inputFile = $("<input>");
+					inputFile.attr("type","file");
+					inputFile.attr("name","file"+count++);
+					
+					let delBtn=$("<a>");
+					delBtn.html("x");
+					delBtn.css("text-decoration-line", "none")
+					delBtn.addClass("line-del");
+					
+					delBtn.on("click", function(){
+						 $(this).parent().remove();
+					})
+					
+					fileDiv.append(inputFile);
+					fileDiv.append(delBtn);
+					fileDiv.css("border", "none")
+					
+					$("#fileAdd").parent().after(fileDiv);
+				})
+            
+            
                 $("#toBoard").on("click", function () { //인덱스 화면으로 가기
-                    location.href = "/list.board";
+                    //location.href = "/list.board";
+                	history.back();
                 })
                  
                 $("#write").on("submit", function(){   //제목이나 내용 입력 안하고 작성하기 눌렀을떄
                 	let title = $("#titlee").val();
                 	let contents = $("#textt").val();
+                	
+                	
       	
+                	console.log(title);
+                	console.log(contents);
+                	
                 	if(title==""||contents==""){
                 		alert("제목이나 내용을 입력하지 않았습니다")
                 		return false;

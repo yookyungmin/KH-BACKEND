@@ -73,7 +73,7 @@
 
                     <div class="row footer">
                         <div class="col-12 right">
-           
+           								
                                     <button type="submit" class="btn btn-outline-secondary" id="toUpdate">수정 완료</button>
                                    
                             <button type="button" class="btn btn-outline-secondary" id="toBack" onclick="history.back()">뒤로가기</button>
@@ -100,6 +100,41 @@
                 //     //location.href="/update.board?seq="+seq;
 
                //  })
+               
+               /*
+               	contenteditable 로 하면 hidden input에 담아서 서브밋
+               	$("input_contents").val()($("#contents").html)
+               	$("#input_title").val($("#title").html())
+
+               	
+               	$("#modify").on("click", function() {
+         $("#delete,#modify").hide();
+         
+         $("#title,#contents").attr("contenteditable","true");
+         
+         let modifyOK = $("<button>");
+         modifyOK.html("수정완료");
+         modifyOK.on("click",function(){
+            $("#detailFrm").attr("action","/update.board");
+            
+            $("#input_contents").val($("#contents").html());
+            $("#input_title").val($("#title").html());
+            
+            $("#detailFrm").submit();
+         })
+         
+         let modifyCancel = $("<button>");
+         modifyCancel.attr("type","button");
+         modifyCancel.html("취소");
+         modifyCancel.on("click",function(){location.reload();});
+         
+         $("#back").before(modifyOK);
+         $("#back").before(modifyCancel);
+      })
+               	
+               	
+               	썸머러스에디터 반응형이랑 호환이좋음
+               */
 
                 </script>
 

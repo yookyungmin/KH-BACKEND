@@ -66,7 +66,7 @@ public class BoardDTO {
 			//System.currentTimeMillis()
 			//1970년 1월 1일부터 경과한 시간을 long값으로 리턴 1/1000 초값을리턴
 			long timeGap = currentTime - writeTime;
-			System.out.println(timeGap);
+//			System.out.println(timeGap);
 			
 			if(timeGap<60*1000) {
 				return "1분 이내";
@@ -77,8 +77,9 @@ public class BoardDTO {
 			}else if(timeGap < 86400*1000) {
 				return "24시간 이내";
 			}else {
-				SimpleDateFormat sdf = new SimpleDateFormat("MM월dd일 hh시mm분");
-				return sdf.format(write_date);
+				SimpleDateFormat sdf = new SimpleDateFormat("MM월dd일 hh시");
+				//SimpleDateFormat sdf = new SimpleDateFormat("MM월dd일 hh시mm분");
+				return sdf.format(writeTime);
 			}
 		
 

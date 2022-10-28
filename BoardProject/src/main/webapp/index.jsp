@@ -94,7 +94,7 @@
 	
 			<script>
 				$("#toBoard").on("click", function(){
-					location.href="/list.board";
+					location.href="/list.board?cpage=1";
 				})
 			
 				$("#logout").on("click", function(){ //로그아웃

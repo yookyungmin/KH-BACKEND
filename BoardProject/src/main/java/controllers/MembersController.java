@@ -20,6 +20,9 @@ public class MembersController extends HttpServlet {
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			request.setCharacterEncoding("utf8"); //한글처리
+			//HTTP상에서 주고 받는 데이터의 헤더값을 UTF-8로 인코딩
+			//request.getParameter로 한글이 깨질 경우
+		
 		String uri = request.getRequestURI();
 		try {
 			
@@ -30,9 +33,11 @@ public class MembersController extends HttpServlet {
 			MemberDAO dao= MemberDAO.getInstance();
 
 			boolean result = dao.isIdExist(id);
-			request.setAttribute("result", result);
-			request.setAttribute("id",id);
-			request.getRequestDispatcher("/member/duplCheckView.jsp").forward(request, response);
+			System.out.println(result);
+			response.getWriter().append(String.valueOf(result)); //ajax 식, 중복체크
+//			request.setAttribute("result", result);
+//			request.setAttribute("id",id);
+//			request.getRequestDispatcher("/member/duplCheckView.jsp").forward(request, response);
 		}else if(uri.equals("/toJoin.mem")) { //회원가입시 db입력, 암호화 적용
 		
 			String id = request.getParameter("id");

@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>${list.seq}. ${list.title}</title>
         <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -34,11 +34,11 @@
                         height: 80%;
                     }
 
-                    textarea{
+                    textarea:nth-child(1){
                     	border:none;
                     	resize:none;
                         width: 100%;
-                        height:500px;
+                        height:100%;
                         background-color : transparent;
                         
                     }
@@ -50,6 +50,16 @@
                         text-align: right;
                     }
                     
+                    .contents{
+                    	height:300px;
+                    }
+                    #replytext{
+                    width:80%;
+                    height:30px;
+                    }
+                    #add{
+                    text-align:right
+                    }
     </style>
 
     </head>
@@ -69,25 +79,204 @@
                 </div>
                 
                 <div class="row footer">
+                <div class="card col-12">
+                       <div class="card-header">
+                         Download Files List
+                       </div>
+                       <ul class="list-group list-group-flush">
+                       
+                       <c:forEach var="f" items="${filelist}">
+                           <li class="list-group-item"><i class="bi bi-link-45deg"></i> ${f.seq }. <a href="/download.file?sysname=${f.sysname }&oriname=${f.oriname}"> ${f.oriname }</a></li>  <!-- 다운로드 흉내 중 -->
+                       </c:forEach>
+                        
+                       </ul>
+                     </div>
                     <div class="col-12 right">
-                    <c:choose>
-                    <c:when test="${loginID==list.writer}">
-                        <button type="button" class="btn btn-outline-secondary" id="toDelete">삭제하기</button>
+                    
+                    	
+                    <c:if test="${loginID==list.writer}">
+                        <button type="button" class="btn btn-outline-danger" id="toDelete">삭제하기</button>
                         <button type="button" class="btn btn-outline-secondary" id="toWriterForm">수정하기</button>
-                        </c:when>
-                           </c:choose>
+                        </c:if>
+                        
                         <button type="button" class="btn btn-outline-secondary" id="toBoard">목록으로</button> 
                     </div>
                 </div>
+                
+                
+              
+                 <div class="row reply">
+                 		   <c:choose>
+                            <c:when test="${not empty list2 }">
+                                <!-- 리스트가 비어있지않다면 -->
+                                <c:forEach var="r" items="${list2 }">
+                        			<form action="" method="post" id="frm">
+                                    <div class="row replycontents">
+                                  
+                                    	<input type="hidden" value="${r.seq}" name="seq" class="rseq">
+                                    	
+                                        <div class="col-12 col-md-3">${r.writer }</div>
+                                        <div class="col-12 col-md-6"><textarea class="inputreply" name="upcomments"  disabled>${r.contents}</textarea> </div>
+                                        <div class="col-12 col-md-1">${r.formDate }</div>
+                                       
+                                       <div class="col-md-2 commentedit">
+                                       <c:if test="${loginID==r.writer}">
+                      			 	 <button type="button"  class="btn btn-outline-danger deleteComment" seq="${r.seq}">삭제하기</button>
+                      				  <button type="button" class="btn btn-outline-secondary updateComment" seq="${r.seq}">수정하기</button>
+                      	 			 </c:if></div>
+                                  		
+                                    </div>
+                            	 </form>
+                                </c:forEach>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="other">작성된 댓글이 없습니다</div>
+                            </c:otherwise>
+                        </c:choose>
+                     
+                 
+                 	
+                 		<form action="" method="post" id="detailFrm" >
+                        <div class="col-12">
+                            <div class="col-12"  id="replywriter">
+                           	<input type="text" name="writer" value="${loginID}" disabled>
+                        	
+                            </div>
+                        </div>
+                        <div class="col-12"> 
+                        	<textarea name="replycontents" id="replytext" ></textarea>
+                        
+
+                            <button class="btn btn-outline-secondary" id="addreply">Reply</button>
+                        </div>
+                        </form>
+                     
+                     </div>
+                
+                
 
             </div>
           
-
+					 
             <script>
-                $("#toBoard").on("click", function () { //인덱스 화면으로 가기
-                        location.href = "/list.board";
-                    })
+         
+            $(document).on("click", ".updateComment", function () {
+        		
+            	$(this).closest(".replycontents").find(".inputreply").attr("disabled", false);
+        		$(this).closest(".commentedit").find(".updateComment").hide();
+        		$(this).closest(".commentedit").find(".deleteComment").hide();
+        		
+        		
+        		
+        		 let modifyOK = $("<button>");
+        		 modifyOK.html("수정완료");
+        		
+        		 /*
+        		let target = $(this).closest(".commentedit").find(".updateComment").val();
+        		console.log(target);
+        		*/
+        		
+        		 let target = $(this).attr("seq"); 
+                 console.log("seq : "+target);
+                 console.log("list seq : "+${list.seq});
+                 
+            
+    			
+   
+        		modifyOK.on("click",function(){
+        			 
+        			 $(this).closest("#frm").attr("action","/update.comments?seq="+target+"&parent_seq="+${list.seq});
+        			 $(this).closest("#frm").submit();
+                  })
+          
+           
+                 
+                 let modifyCancel = $("<button>");
+                 modifyCancel.attr("type","button");
+                 modifyCancel.html("취소");
+                 modifyCancel.on("click",function(){location.reload();});
+                 
+                 $(this).closest(".commentedit").find(".updateComment").before(modifyOK);
+                 $(this).closest(".commentedit").find(".updateComment").before(modifyCancel);
+              })
+            
+            
+            
+       
+           			$(".deleteComment").on("click", function(){
+           				 let target=$(this).attr("seq");
+           				location.href="/delete.comments?seq="+target+"&parent_seq="+${list.seq};
+           			})
+           		
+            
+            	$("#addreply").on("click", function(){
+            		let replytextt = $("#replytext").val();
+            
+            		console.log(replytextt);
+            		
+            		if(replytextt==""){  //textarea 태그에 띄어쓰기 주의
+            			console.log("입력된 내용이 빈칸입니다")
+            			alert("입력된 내용이 없습니다");	
+            			return false;
+            			}
+            				else{
+            			$("#detailFrm").attr("action", "/insert.comments?parent_seq="+${list.seq})
+                		$("#detailFrm").submit();
+            		}
+            		
+            
+            	})
+          
+     	  /*
+          	$("#addreply").on("click", function(){
+            		
+            		let replytextt = $("#replytext").val();
+            		console.log(replytextt);
+            		
+            		if(replytextt==""){
+            			console.log("입력된 내용이없습니다")
+            			alert("입력된 내용이 없습니다");	
+            			return false;
+            		}else{
+            			alert("등록이 되었습니다")
+            			
+            			$("#reply").attr("action", "/insert.comments?parent_seq="+${list.seq})
+            			$("#reply").submit();
+            		}
+            		
+            	})  
+            	
+            	*/
+           
+            /*	$(".replydelete").on("click", function(){
+            		
+            		let rseq= $("#rseq").val();
+
+                	let result = confirm("삭제하실건가요?");
+                	
+                	if(result){
+                	 	location.href="/delete.comments?rseq="+rseq+"?parent_seq="+${list.seq};
+                	}else{
+                		return false;
+                	}
+                	
+            	})*/
+      
+            
+         			   /*
+						c:if  else , else if 가없어서 하나의 경우의수만
+						*/
+            		/*	
+            		$("#toBoard").on("click", function () { //인덱스 화면으로 가기
+                     	history.back(); 글수정하고 뒤로가기 누르면 다시 글수정화면으로감
+                    })   */
                     
+                    $("#toBoard").on("click", function () { //인덱스 화면으로 가기
+                     	location.href="list.board?cpage=1"; 
+                    	//history.back();
+                    })
+        	       //수정을 완료하고 목록으로 했을때 다시 수정화면으로 안가게?
+          		
                     
                     $("#toDelete").on("click", function(){
                     	
@@ -111,6 +300,30 @@
                     	location.href="/upwriterForm.board?seq="+seq;
                     })
                     
+                  
+                 /*
+                    $("#delete").on("click", fuction(){
+                    	$("#detailFrm").attr("action", "/delete.board");   $("#detailFrm").attr("action", "/delete.board?seq=${dto.seq}"); 이것도됨
+                    	$("#detailFrm").submit();
+                    })
+                    
+                    $("#update").on("click", fuction(){
+                    	$("#detailFrm").attr("action", "/update.board");
+                    	$("#detailFrm").submit();
+                    })   수정,삭제버튼에 타입버튼을 주고 폼태그로 묶꼬 action을 비우고 id값(detailFrm)을 준다음에 어떤 버튼을 누르냐에 따라 action 값이 바뀌게끔
+                    
+                    	name, select , 
+                    	<input type=hidden value=$(dto.seq} name=seq )
+                    		display : none 대신 hidden
+                    		<input 태그 textarea , select  서브밋으로 넘어갈수 있는 데이터 
+                    */
+                    
+                    
+                    
+                    /*
+                    	
+                    
+                    */
             </script>
 
 
